@@ -1,0 +1,28 @@
+Host BastionNSO
+  Hostname <bastion_ip_address>
+  User ubuntu
+  IdentityFile ~/.ssh/<ssh_key>
+
+Host haproxy
+  User ubuntu
+  Hostname <haproxy_ip_address>
+  IdentityFile ~/.ssh/<ssh_key>
+  ProxyJump BastionNSO
+
+Host devA
+  User ubuntu
+  Hostname <devA_ip_address>
+  IdentityFile ~/.ssh/<ssh_key>
+  ProxyJump BastionNSO
+
+Host devB
+  User ubuntu
+  Hostname <devB_ip_address>
+  IdentityFile ~/.ssh/<ssh_key>
+  ProxyJump BastionNSO
+
+Host devC
+  User ubuntu
+  Hostname <devC_ip_address>
+  IdentityFile ~/.ssh/<ssh_key>
+  ProxyJump BastionNSO
