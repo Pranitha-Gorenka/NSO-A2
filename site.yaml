@@ -1,6 +1,12 @@
 - hosts: webservers
   become: true
   tasks:
+    - name: Install software-properties-common
+      apt:
+        name: software-properties-common
+        state: present
+        update_cache: yes
+        
     - name: Install Apache2
       apt:
         name: apache2
@@ -11,14 +17,11 @@
         name: libapache2-mod-wsgi-py3
         state: present
 
-    - name: Install python-pip
-      apt:
-        name: python-pip
-        state: present
-
     - name: Install python3-pip
       apt:
-        name: python3-pip
+        name: 
+          - python3
+          - python3-pip
         state: present
 
     - name: Install Flask
@@ -81,17 +84,17 @@
         state: restarted
 
 
--  hosts: haproxy
+-  hosts: HAproxy
    become: true
    tasks:
      - name: Add HAProxy PPA
        apt_repository:
         repo: 'ppa:vbernat/haproxy-2.4'
+        update_cache: yes
         
      - name: Install HAProxy
        apt:
         name: haproxy=2.4.*
-        update_cache: yes
          
      - name: Configure HAProxy
        template:
@@ -99,7 +102,7 @@
         dest: /etc/haproxy/haproxy.cfg
        vars:
         haproxy_ip: "{{ hostvars['haproxy']['ansible_default_ipv4']['address'] }}"
-       when: "'ansible_default_ipv4' in hostvars['haproxy']"
+      
       
      - name: Restart HAProxy
        become: true
@@ -135,7 +138,7 @@
         name: apache2
         state: restarted 
 
--  hosts: haproxy
+-  hosts: HAproxy
    tasks:
      - name: Display haproxy IP address
        debug:
